@@ -1,0 +1,11 @@
+from django.urls import path
+from . import views
+
+app_name = 'sosmed'
+
+urlpatterns = [
+    path('create/', views.create, name='create'),
+    path('list/', views.list_instagram, name='list'),
+    path('update/<int:update_id>/', views.update, name='update'),
+    path('delete/<int:delete_id>/', views.delete, name='delete'),  # TAMBAHKAN INI
+]

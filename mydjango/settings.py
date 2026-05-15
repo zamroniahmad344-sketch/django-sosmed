@@ -8,6 +8,7 @@ SECRET_KEY = 'django-insecure-8s!v7x9@#m$k*123456789'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*', 'django-sosmed-production.up.railway.app']
+
 CSRF_TRUSTED_ORIGINS = ['https://django-sosmed-production.up.railway.app']
 
 INSTALLED_APPS = [

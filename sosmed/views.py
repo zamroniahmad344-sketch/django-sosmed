@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import Instagram
 from .forms import InstagramForm
-
 
 def create(request):
     akun_form = InstagramForm(request.POST or None)
@@ -9,55 +9,44 @@ def create(request):
     if request.method == 'POST':
         if akun_form.is_valid():
             akun_form.save()
+            messages.success(request, 'Akun berhasil ditambahkan!')
             return redirect('sosmed:list')
 
     context = {
-        "page_title": "Tambah akun",
+        "page_title": "Tambah Akun",
         "akun_form": akun_form,
     }
 
     return render(request, 'sosmed/create.html', context)
 
-
 def list_instagram(request):
     semua_akun = Instagram.objects.all()
 
     context = {
-        'page_title': 'Sosial Media',
+        'page_title': 'Dashboard',
         'semua_akun': semua_akun,
     }
 
     return render(request, 'sosmed/list.html', context)
 
-
 def update(request, update_id):
     akun_update = Instagram.objects.get(id=update_id)
-
-    data = {
-        'nama_depan': akun_update.nama_depan,
-        'nama_belakang': akun_update.nama_belakang,
-        'username': akun_update.username,
-    }
-
-    akun_forma = InstagramForm(
-        request.POST or None,
-        initial=data,
-        instance=akun_update
-    )
+    akun_form = InstagramForm(request.POST or None, instance=akun_update)
 
     if request.method == 'POST':
-        if akun_forma.is_valid():
-            akun_forma.save()
+        if akun_form.is_valid():
+            akun_form.save()
+            messages.success(request, 'Akun berhasil diupdate!')
             return redirect('sosmed:list')
 
     context = {
-        "page_title": "Update akun",
-        "akun_form": akun_forma,
+        "page_title": "Update Akun",
+        "akun_form": akun_form,
     }
 
-    return render(request, template_name='sosmed/create.html', context=context)
-
+    return render(request, 'sosmed/create.html', context)
 
 def delete(request, delete_id):
     Instagram.objects.filter(id=delete_id).delete()
+    messages.success(request, 'Akun berhasil dihapus!')
     return redirect('sosmed:list')

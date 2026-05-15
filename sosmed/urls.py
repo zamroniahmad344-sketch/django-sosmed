@@ -4,8 +4,8 @@ from . import views
 app_name = 'sosmed'
 
 urlpatterns = [
+    path('', views.list_instagram, name='list'),
     path('create/', views.create, name='create'),
-    path('list/', views.list_instagram, name='list'),
     path('update/<int:update_id>/', views.update, name='update'),
-    path('delete/<int:delete_id>/', views.delete, name='delete'),  # TAMBAHKAN INI
+    path('delete/<int:delete_id>/', views.delete, name='delete'),
 ]

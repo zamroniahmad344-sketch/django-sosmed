@@ -1,2 +1,1 @@
-migrate: python manage.py migrate
-web: gunicorn mydjango.wsgi
+﻿web: gunicorn mydjango.wsgi --log-file -

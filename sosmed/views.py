@@ -1,12 +1,52 @@
-from django import forms
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .models import Instagram
+from .forms import InstagramForm
 
-class InstagramForm(forms.ModelForm):
-    class Meta:
-        model = Instagram
-        fields = ['nama_depan', 'nama_belakang', 'username']
-        
-    def __init__(self, *args, **kwargs):
-        super(InstagramForm, self).__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+def create(request):
+    akun_form = InstagramForm(request.POST or None)
+
+    if request.method == 'POST':
+        if akun_form.is_valid():
+            akun_form.save()
+            messages.success(request, 'Akun berhasil ditambahkan!')
+            return redirect('sosmed:list')
+
+    context = {
+        "page_title": "Tambah Akun",
+        "akun_form": akun_form,
+    }
+
+    return render(request, 'sosmed/create.html', context)
+
+def list_instagram(request):
+    semua_akun = Instagram.objects.all()
+
+    context = {
+        'page_title': 'Dashboard',
+        'semua_akun': semua_akun,
+    }
+
+    return render(request, 'sosmed/list.html', context)
+
+def update(request, update_id):
+    akun_update = Instagram.objects.get(id=update_id)
+    akun_form = InstagramForm(request.POST or None, instance=akun_update)
+
+    if request.method == 'POST':
+        if akun_form.is_valid():
+            akun_form.save()
+            messages.success(request, 'Akun berhasil diupdate!')
+            return redirect('sosmed:list')
+
+    context = {
+        "page_title": "Update Akun",
+        "akun_form": akun_form,
+    }
+
+    return render(request, 'sosmed/create.html', context)
+
+def delete(request, delete_id):
+    Instagram.objects.filter(id=delete_id).delete()
+    messages.success(request, 'Akun berhasil dihapus!')
+    return redirect('sosmed:list')

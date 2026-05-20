@@ -17,5 +17,11 @@ COPY . .
 # Collect static files
 RUN python manage.py collectstatic --noinput
 
-# Run gunicorn
-CMD ["gunicorn", "mydjango.wsgi:application", "--log-file", "-"]
+# Run gunicorn — log-file/access-logfile/capture-output all route to stdout
+CMD ["gunicorn", "mydjango.wsgi:application", \
+     "--bind", "0.0.0.0:8000", \
+     "--workers", "2", \
+     "--log-file", "-", \
+     "--access-logfile", "-", \
+     "--capture-output", \
+     "--log-level", "debug"]

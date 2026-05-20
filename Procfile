@@ -1,2 +1,2 @@
 ﻿release: pip install setuptools wheel && python manage.py migrate --noinput
-web: gunicorn mydjango.wsgi:application --log-file -
+web: gunicorn mydjango.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --log-file - --access-logfile - --capture-output --log-level debug
